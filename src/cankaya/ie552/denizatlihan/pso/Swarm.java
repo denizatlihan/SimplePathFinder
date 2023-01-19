@@ -9,16 +9,16 @@ import cankaya.ie552.denizatlihan.drawer.IObstacle;
 public class Swarm {
 
     private List<Particle> particles = new ArrayList<Particle>();
-    private Coordinate globalBest;
+    private CoordinateVector globalBest;
 
     public Swarm(int numberOfParticles, int startX, int startY) {
 
         for (int i = 0; i < numberOfParticles; i++) {
 
-            particles.add(new Particle(startX, startY));
+            particles.add(new Particle(startX, startY, Math.PI / 3));
         }
 
-        globalBest = new Coordinate(startX, startY);
+        globalBest = particles.get(0).getCoordinateVector();
     }
 
     public List<Particle> getParticles() {
@@ -32,19 +32,12 @@ public class Swarm {
 
         for (Particle particle : particles) {
 
-            Coordinate newDistance = particle.calculateNextLocation(obstacles, finish, globalBestDistance);
-
-            if (newDistance != null) {
-
-                globalBest = newDistance;
-                globalBestDistance = finish.distanceTo(globalBest);
-            }
+            particle.calculateNextLocation(obstacles, finish, globalBestDistance);
 
             if (particle.inside(finish)) {
 
                 return particle;
             }
-
         }
 
         return null;

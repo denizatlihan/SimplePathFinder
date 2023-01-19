@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import cankaya.ie552.denizatlihan.Utility;
-import cankaya.ie552.denizatlihan.pso.Coordinate;
+import cankaya.ie552.denizatlihan.pso.CoordinateVector;
 
 public class Checkpoint implements IDrawer {
 
@@ -31,12 +31,12 @@ public class Checkpoint implements IDrawer {
 
     public int getCenterX() {
 
-        return (x + w) / 2;
+        return x + w / 2;
     }
 
     public int getCenterY() {
 
-        return (y + h) / 2;
+        return y + h / 2;
     }
 
     public boolean contains(int centerX, int centerY) {
@@ -69,7 +69,12 @@ public class Checkpoint implements IDrawer {
 
     }
 
-    public int distanceTo(Coordinate coordinate) {
+    public boolean contains(CoordinateVector c) {
+
+        return contains(c.x, c.y);
+    }
+
+    public int distanceTo(CoordinateVector coordinate) {
 
         return Utility.distance(x, y, coordinate.x, coordinate.y);
     }

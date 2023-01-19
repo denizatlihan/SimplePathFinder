@@ -4,76 +4,109 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
+import cankaya.ie552.denizatlihan.Utility;
 import cankaya.ie552.denizatlihan.drawer.Checkpoint;
 import cankaya.ie552.denizatlihan.drawer.IDrawer;
 import cankaya.ie552.denizatlihan.drawer.IObstacle;
 
 public class Particle implements IDrawer {
 
-    private int centerX;
-    private int centerY;
     private int rOut = 8;
     private int rIn = 6;
+
+    private static final double c1 = 0.8d;
+    private static final double c2 = 0.3d;
+
+    private static final int len = 10;
+    private static final double maxHeadingChange = Math.PI / 6;
+
     private Color colorOut = new Color(100, 10, 100);
     private Color colorIn = new Color(100, 100, 250);
-    private ParticleHistory history = new ParticleHistory();
+    private ParticleHistory<CoordinateVector> history = new ParticleHistory<CoordinateVector>();
+    private CoordinateVector current;
 
-    public Particle(int centerX, int centerY) {
+    public Particle(int centerX, int centerY, double heading) {
 
-        this.centerX = centerX;
-        this.centerY = centerY;
+        this.current = new CoordinateVector(centerX, centerY, heading);
     }
 
     @Override
     public void draw(Graphics g) {
 
         g.setColor(colorOut);
-        g.fillOval(centerX - rOut / 2, centerY - rOut / 2, rOut, rOut);
+        g.fillOval(current.x - rOut / 2, current.y - rOut / 2, rOut, rOut);
         g.setColor(colorIn);
-        g.fillOval(centerX - rIn / 2, centerY - rIn / 2, rIn, rIn);
+        g.fillOval(current.x - rIn / 2, current.y - rIn / 2, rIn, rIn);
+
+        int headingArrowLen = 10;
+        int x2 = (int) (headingArrowLen * Math.cos(current.heading));
+        int y2 = (int) (headingArrowLen * Math.sin(current.heading));
+        g.drawLine(current.x, current.y, current.x + x2, current.y + y2);
     }
 
-    public Coordinate calculateNextLocation(List<IObstacle> obstacles, Checkpoint finish, int globalBestDistance) {
+    public CoordinateVector calculateNextLocation(List<IObstacle> obstacles, Checkpoint finish,
+            int globalBestDistance) {
 
-        history.push(new Coordinate(centerX, centerY));
+        history.push(new CoordinateVector(current.x, current.y, current.heading));
 
-        int stepX = (int) (Math.random() * 5);
-        int stepY = (int) (Math.random() * 5);
+        CoordinateVector candidate = calculateRandomPosition(current, finish);
 
-        boolean calculate = true;
-        boolean pop = false;
+        int historyLimit = history.size() - 2;
 
-        while (calculate) {
+        boolean available = false;
 
-            calculate = false;
+        while (available == false) {
+
+            available = true;
 
             for (IObstacle obstacle : obstacles) {
 
-                if (obstacle.contains(centerX + stepX, centerY + stepY)) {
+                if (obstacle.contains(candidate)) {
 
-                    if (history.size() >= 0) {
-                        Coordinate last = history.pop();
-                        centerX = last.x;
-                        centerY = last.y;
+                    if (history.size() > historyLimit) {
+
+                        CoordinateVector last = history.pop();
+                        current.x = last.x;
+                        current.y = last.y;
+                        current.heading = last.heading;
                     }
 
-                    stepX = (int) (Math.random() * 30);
-                    stepY = (int) (Math.random() * 30);
-                    calculate = true;
+                    available = false;
+                    candidate = calculateRandomPosition(current, finish);
                     break;
                 }
             }
         }
 
-        centerX += stepX;
-        centerY += stepY;
+        current.x = candidate.x;
+        current.y = candidate.y;
+        current.heading = candidate.heading;
 
         return null;
     }
 
+    private CoordinateVector calculateRandomPosition(CoordinateVector current, Checkpoint finish) {
+
+        double randomChange = (Math.random() * maxHeadingChange) - (maxHeadingChange / 2);
+
+        CoordinateVector candidate = new CoordinateVector(current.x, current.y, current.heading);
+
+        candidate.x = (int) (current.x + len * c1 * Math.cos(current.heading + randomChange));
+        candidate.y = (int) (current.y + len * c1 * Math.sin(current.heading + randomChange));
+
+        double angleBetween = Utility.angleBetween(candidate, finish);
+
+        candidate.x += (int) (len * c2 * Math.cos(angleBetween));
+        candidate.y += (int) (len * c2 * Math.sin(angleBetween));
+
+        candidate.heading = Utility.angleBetween(current, candidate);
+
+        return candidate;
+    }
+
     public boolean inside(Checkpoint finish) {
 
-        return finish.contains(centerX, centerY);
+        return finish.contains(current);
     }
 
     public void drawHistory(Graphics g) {
@@ -82,11 +115,19 @@ public class Particle implements IDrawer {
 
         for (int i = 0; i < history.size() - 1; i++) {
 
-            Coordinate c1 = history.get(i);
-            Coordinate c2 = history.get(i + 1);
+            CoordinateVector c1 = history.get(i);
+            CoordinateVector c2 = history.get(i + 1);
 
             g.drawLine(c1.x, c1.y, c2.x, c2.y);
+
+            g.setColor(colorOut);
+            g.fillOval(c2.x - 3, c2.y - 3, 6, 6);
         }
+    }
+
+    public CoordinateVector getCoordinateVector() {
+
+        return current;
     }
 
 }

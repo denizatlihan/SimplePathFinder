@@ -18,11 +18,11 @@ public class MainTest {
         TestMedia media = new TestMedia();
 
         // Starting point of the path to be calculated
-        Checkpoint start = new Checkpoint(0, 0, 50, 50);
+        Checkpoint start = new Checkpoint(0, 0, 10, 10);
         media.setStart(start);
 
         // Finishing point of the path to be calculated
-        Checkpoint finish = new Checkpoint(450, 450, 50, 50);
+        Checkpoint finish = new Checkpoint(490, 490, 10, 10);
         media.setFinish(finish);
 
         // Circular obstacles for test media
@@ -50,8 +50,7 @@ public class MainTest {
 
     private static List<IObstacle> createObstacles() {
 
-        int r = 130;
-
+        int r = 100;
         return Arrays.asList(
                 new CircularObstacle(100, 200, r),
                 new CircularObstacle(200, 100, r),

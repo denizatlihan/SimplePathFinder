@@ -3,6 +3,7 @@ package cankaya.ie552.denizatlihan;
 import java.awt.Graphics;
 
 import cankaya.ie552.denizatlihan.drawer.IObstacle;
+import cankaya.ie552.denizatlihan.pso.CoordinateVector;
 
 public class OutterRect implements IObstacle {
 
@@ -38,6 +39,12 @@ public class OutterRect implements IObstacle {
     public void draw(Graphics g) {
 
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public boolean contains(CoordinateVector candidate) {
+
+        return contains(candidate.x, candidate.y);
     }
 
 }

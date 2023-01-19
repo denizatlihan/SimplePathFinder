@@ -3,18 +3,18 @@ package cankaya.ie552.denizatlihan.pso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParticleHistory {
+public class ParticleHistory<T> {
 
-    private List<Coordinate> history = new ArrayList<Coordinate>();
+    private List<T> history = new ArrayList<T>();
 
-    public void push(Coordinate point) {
+    public void push(T point) {
 
         history.add(point);
     }
 
-    public Coordinate pop() {
+    public T pop() {
 
-        Coordinate last = last();
+        T last = last();
 
         if (last != null) {
 
@@ -24,7 +24,7 @@ public class ParticleHistory {
         return last;
     }
 
-    public Coordinate last() {
+    public T last() {
 
         if (history.size() == 0) {
 
@@ -39,7 +39,7 @@ public class ParticleHistory {
         return history.size();
     }
 
-    public Coordinate get(int i) {
+    public T get(int i) {
 
         return history.get(i);
     }

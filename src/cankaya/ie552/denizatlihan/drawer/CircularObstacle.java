@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import cankaya.ie552.denizatlihan.Utility;
+import cankaya.ie552.denizatlihan.pso.CoordinateVector;
 
 public class CircularObstacle implements IObstacle {
 
@@ -34,6 +35,12 @@ public class CircularObstacle implements IObstacle {
     public boolean contains(int centerX, int centerY) {
 
         return Utility.distance(x, y, centerX, centerY) < r / 2;
+    }
+
+    @Override
+    public boolean contains(CoordinateVector candidate) {
+
+        return contains(candidate.x, candidate.y);
     }
 
 }
