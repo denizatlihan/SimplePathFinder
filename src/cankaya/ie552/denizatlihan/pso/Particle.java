@@ -113,18 +113,22 @@ public class Particle implements IDrawer {
 
     public void drawHistory(Graphics g) {
 
-        g.setColor(Color.cyan);
-
         for (int i = 0; i < history.size() - 1; i++) {
 
             CoordinateVector c1 = history.get(i);
             CoordinateVector c2 = history.get(i + 1);
 
+            g.setColor(Color.cyan);
             g.drawLine(c1.x, c1.y, c2.x, c2.y);
 
             g.setColor(colorOut);
             g.fillOval(c2.x - 3, c2.y - 3, 6, 6);
         }
+
+        CoordinateVector c1 = history.get(history.size() - 1);
+
+        g.setColor(Color.cyan);
+        g.drawLine(c1.x, c1.y, current.x, current.y);
     }
 
     public CoordinateVector getCoordinateVector() {

@@ -39,6 +39,19 @@ public class MainTest {
         PsoResult psoSolution = psoSolver.solve(20000, 50);
         psoSolution.print();
 
+        media.setDrawer(null);
+
+        if (psoSolution.solutionFound == true) {
+
+            media.setDrawer(g2 -> {
+
+                psoSolution.arrivedParticle.drawHistory(g2);
+                psoSolver.writeIterationSummary(g2);
+            });
+
+            media.repaint();
+        }
+
         // // Solving path planning problem with custom greedy method
         // GreedySolver greedySolver = new GreedySolver();
         // Result resultGreedy = greedySolver.solve();

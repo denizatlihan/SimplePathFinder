@@ -20,7 +20,7 @@ public class PsoResult {
         System.out.println("PSO SOLUTION:");
         System.out.println("Iteration: " + iteration);
         System.out.println("# Milestones: " + arrivedParticle.getHistory().size());
-        System.out.println("Elapsed Solution Time Without Animation(ms): " + realElapsedTime);
+        System.out.println("Elapsed Solution Time Without Animation(ms): " + realElapsedTime / 1000000);
     }
 
 }

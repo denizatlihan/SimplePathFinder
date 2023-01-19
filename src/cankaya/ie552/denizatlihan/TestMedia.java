@@ -9,9 +9,9 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
-import cankaya.ie552.denizatlihan.pso.Particle;
 import cankaya.ie552.denizatlihan.utility.Checkpoint;
 import cankaya.ie552.denizatlihan.utility.IObstacle;
+import cankaya.ie552.denizatlihan.utility.ITestMediaDrawer;
 
 @SuppressWarnings("serial")
 public class TestMedia extends JComponent {
@@ -19,7 +19,7 @@ public class TestMedia extends JComponent {
     private Checkpoint start;
     private Checkpoint finish;
     private List<IObstacle> obstacles = new ArrayList<IObstacle>();
-    private List<Particle> particles = new ArrayList<Particle>();
+    private ITestMediaDrawer drawer;
 
     @Override
     public void paint(Graphics g) {
@@ -38,11 +38,10 @@ public class TestMedia extends JComponent {
             obstacle.draw(g);
         }
 
-        for (Particle particle : particles) {
+        if (drawer != null) {
 
-            particle.draw(g);
+            drawer.draw(g2);
         }
-
     }
 
     public void setStart(Checkpoint checkpoint) {
@@ -60,8 +59,8 @@ public class TestMedia extends JComponent {
         this.obstacles = createdObstacles;
     }
 
-    public void setParticles(List<Particle> particles) {
+    public void setDrawer(ITestMediaDrawer drawer) {
 
-        this.particles = particles;
+        this.drawer = drawer;
     }
 }
