@@ -1,4 +1,4 @@
-package cankaya.ie552.denizatlihan.drawer;
+package cankaya.ie552.denizatlihan.utility;
 
 import java.awt.Graphics;
 

@@ -1,10 +1,7 @@
-package cankaya.ie552.denizatlihan.drawer;
+package cankaya.ie552.denizatlihan.utility;
 
 import java.awt.Color;
 import java.awt.Graphics;
-
-import cankaya.ie552.denizatlihan.Utility;
-import cankaya.ie552.denizatlihan.pso.CoordinateVector;
 
 public class CircularObstacle implements IObstacle {
 
@@ -34,7 +31,7 @@ public class CircularObstacle implements IObstacle {
     @Override
     public boolean contains(int centerX, int centerY) {
 
-        return Utility.distance(x, y, centerX, centerY) < r / 2;
+        return Utils.distance(x, y, centerX, centerY) < r / 2;
     }
 
     @Override

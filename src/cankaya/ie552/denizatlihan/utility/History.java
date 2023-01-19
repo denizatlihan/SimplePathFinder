@@ -1,9 +1,9 @@
-package cankaya.ie552.denizatlihan.pso;
+package cankaya.ie552.denizatlihan.utility;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParticleHistory<T> {
+public class History<T> {
 
     private List<T> history = new ArrayList<T>();
 

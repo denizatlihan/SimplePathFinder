@@ -5,10 +5,12 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
-import cankaya.ie552.denizatlihan.drawer.Checkpoint;
-import cankaya.ie552.denizatlihan.drawer.CircularObstacle;
-import cankaya.ie552.denizatlihan.drawer.IObstacle;
+import cankaya.ie552.denizatlihan.pso.PsoResult;
 import cankaya.ie552.denizatlihan.pso.PsoSolver;
+import cankaya.ie552.denizatlihan.utility.Checkpoint;
+import cankaya.ie552.denizatlihan.utility.CircularObstacle;
+import cankaya.ie552.denizatlihan.utility.IObstacle;
+import cankaya.ie552.denizatlihan.utility.OutterRect;
 
 public class MainTest {
 
@@ -34,10 +36,8 @@ public class MainTest {
 
         // Solving path planning problem with particle swarm optimization
         PsoSolver psoSolver = new PsoSolver(media, start, finish, obstacles, 20);
-        Result resultPso = psoSolver.solve(20000, 50);
-
-        // Showing pso results
-        media.showResult(resultPso);
+        PsoResult psoSolution = psoSolver.solve(20000, 50);
+        psoSolution.print();
 
         // // Solving path planning problem with custom greedy method
         // GreedySolver greedySolver = new GreedySolver();

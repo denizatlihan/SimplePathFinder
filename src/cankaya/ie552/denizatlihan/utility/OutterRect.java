@@ -1,9 +1,6 @@
-package cankaya.ie552.denizatlihan;
+package cankaya.ie552.denizatlihan.utility;
 
 import java.awt.Graphics;
-
-import cankaya.ie552.denizatlihan.drawer.IObstacle;
-import cankaya.ie552.denizatlihan.pso.CoordinateVector;
 
 public class OutterRect implements IObstacle {
 

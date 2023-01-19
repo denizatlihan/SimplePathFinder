@@ -9,17 +9,15 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
-import cankaya.ie552.denizatlihan.drawer.Checkpoint;
-import cankaya.ie552.denizatlihan.drawer.CircularObstacle;
-import cankaya.ie552.denizatlihan.drawer.IObstacle;
 import cankaya.ie552.denizatlihan.pso.Particle;
+import cankaya.ie552.denizatlihan.utility.Checkpoint;
+import cankaya.ie552.denizatlihan.utility.IObstacle;
 
 @SuppressWarnings("serial")
 public class TestMedia extends JComponent {
 
     private Checkpoint start;
     private Checkpoint finish;
-    private Result result;
     private List<IObstacle> obstacles = new ArrayList<IObstacle>();
     private List<Particle> particles = new ArrayList<Particle>();
 
@@ -40,16 +38,9 @@ public class TestMedia extends JComponent {
             obstacle.draw(g);
         }
 
-        if (result == null) {
+        for (Particle particle : particles) {
 
-            for (Particle particle : particles) {
-
-                particle.draw(g);
-            }
-
-        } else {
-
-            result.draw(g);
+            particle.draw(g);
         }
 
     }
@@ -73,11 +64,4 @@ public class TestMedia extends JComponent {
 
         this.particles = particles;
     }
-
-    public void showResult(Result result) {
-
-        this.result = result;
-        repaint();
-    }
-
 }

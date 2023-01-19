@@ -1,9 +1,6 @@
-package cankaya.ie552.denizatlihan;
+package cankaya.ie552.denizatlihan.utility;
 
-import cankaya.ie552.denizatlihan.drawer.Checkpoint;
-import cankaya.ie552.denizatlihan.pso.CoordinateVector;
-
-public class Utility {
+public class Utils {
 
     public static int distance(int x, int y, int x2, int y2) {
 
@@ -18,6 +15,17 @@ public class Utility {
     public static double angleBetween(CoordinateVector current, CoordinateVector candidate) {
 
         return Math.atan(((double) candidate.y - current.y) / ((double) candidate.x - current.x));
+    }
+
+    public static void sleep(long time) {
+
+        try {
+
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+
+            e.printStackTrace();
+        }
     }
 
 }

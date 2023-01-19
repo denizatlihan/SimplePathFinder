@@ -1,4 +1,4 @@
-package cankaya.ie552.denizatlihan.pso;
+package cankaya.ie552.denizatlihan.utility;
 
 public class CoordinateVector {
 

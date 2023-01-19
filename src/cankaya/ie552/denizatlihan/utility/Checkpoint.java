@@ -1,10 +1,7 @@
-package cankaya.ie552.denizatlihan.drawer;
+package cankaya.ie552.denizatlihan.utility;
 
 import java.awt.Color;
 import java.awt.Graphics;
-
-import cankaya.ie552.denizatlihan.Utility;
-import cankaya.ie552.denizatlihan.pso.CoordinateVector;
 
 public class Checkpoint implements IDrawer {
 
@@ -76,6 +73,6 @@ public class Checkpoint implements IDrawer {
 
     public int distanceTo(CoordinateVector coordinate) {
 
-        return Utility.distance(x, y, coordinate.x, coordinate.y);
+        return Utils.distance(x, y, coordinate.x, coordinate.y);
     }
 }

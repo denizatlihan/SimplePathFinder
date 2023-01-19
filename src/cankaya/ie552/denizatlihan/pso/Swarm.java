@@ -3,8 +3,9 @@ package cankaya.ie552.denizatlihan.pso;
 import java.util.ArrayList;
 import java.util.List;
 
-import cankaya.ie552.denizatlihan.drawer.Checkpoint;
-import cankaya.ie552.denizatlihan.drawer.IObstacle;
+import cankaya.ie552.denizatlihan.utility.Checkpoint;
+import cankaya.ie552.denizatlihan.utility.CoordinateVector;
+import cankaya.ie552.denizatlihan.utility.IObstacle;
 
 public class Swarm {
 

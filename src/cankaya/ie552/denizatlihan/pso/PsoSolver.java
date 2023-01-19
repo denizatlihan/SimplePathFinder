@@ -2,10 +2,10 @@ package cankaya.ie552.denizatlihan.pso;
 
 import java.util.List;
 
-import cankaya.ie552.denizatlihan.Result;
 import cankaya.ie552.denizatlihan.TestMedia;
-import cankaya.ie552.denizatlihan.drawer.Checkpoint;
-import cankaya.ie552.denizatlihan.drawer.IObstacle;
+import cankaya.ie552.denizatlihan.utility.Checkpoint;
+import cankaya.ie552.denizatlihan.utility.IObstacle;
+import cankaya.ie552.denizatlihan.utility.Utils;
 
 public class PsoSolver {
 
@@ -25,13 +25,14 @@ public class PsoSolver {
         media.setParticles(swarm.getParticles());
     }
 
-    public Result solve(long iterationLimit, long delayForAnimation) {
+    public PsoResult solve(long iterationLimit, long delayForAnimation) {
 
         Particle arrivedParticle = null;
         Long realElapsedTime = 0l;
         long iteration = 0;
+        boolean solutionFound = false;
 
-        while (arrivedParticle == null && iteration < iterationLimit) {
+        while (iteration < iterationLimit) {
 
             iteration++;
 
@@ -41,18 +42,18 @@ public class PsoSolver {
 
             realElapsedTime += (System.currentTimeMillis() - now);
 
-            try {
+            if (arrivedParticle != null) {
 
-                Thread.sleep(delayForAnimation);
-            } catch (InterruptedException e) {
-
-                e.printStackTrace();
+                solutionFound = true;
+                break;
             }
+
+            Utils.sleep(delayForAnimation);
 
             media.repaint();
         }
 
-        return new Result(arrivedParticle, iteration, realElapsedTime);
+        return new PsoResult(arrivedParticle, realElapsedTime, solutionFound, iteration);
     }
 
 }

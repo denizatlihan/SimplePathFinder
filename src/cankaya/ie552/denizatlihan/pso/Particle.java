@@ -4,10 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
-import cankaya.ie552.denizatlihan.Utility;
-import cankaya.ie552.denizatlihan.drawer.Checkpoint;
-import cankaya.ie552.denizatlihan.drawer.IDrawer;
-import cankaya.ie552.denizatlihan.drawer.IObstacle;
+import cankaya.ie552.denizatlihan.utility.Checkpoint;
+import cankaya.ie552.denizatlihan.utility.CoordinateVector;
+import cankaya.ie552.denizatlihan.utility.History;
+import cankaya.ie552.denizatlihan.utility.IDrawer;
+import cankaya.ie552.denizatlihan.utility.IObstacle;
+import cankaya.ie552.denizatlihan.utility.Utils;
 
 public class Particle implements IDrawer {
 
@@ -22,7 +24,7 @@ public class Particle implements IDrawer {
 
     private Color colorOut = new Color(100, 10, 100);
     private Color colorIn = new Color(100, 100, 250);
-    private ParticleHistory<CoordinateVector> history = new ParticleHistory<CoordinateVector>();
+    private History<CoordinateVector> history = new History<CoordinateVector>();
     private CoordinateVector current;
 
     public Particle(int centerX, int centerY, double heading) {
@@ -94,12 +96,12 @@ public class Particle implements IDrawer {
         candidate.x = (int) (current.x + len * c1 * Math.cos(current.heading + randomChange));
         candidate.y = (int) (current.y + len * c1 * Math.sin(current.heading + randomChange));
 
-        double angleBetween = Utility.angleBetween(candidate, finish);
+        double angleBetween = Utils.angleBetween(candidate, finish);
 
         candidate.x += (int) (len * c2 * Math.cos(angleBetween));
         candidate.y += (int) (len * c2 * Math.sin(angleBetween));
 
-        candidate.heading = Utility.angleBetween(current, candidate);
+        candidate.heading = Utils.angleBetween(current, candidate);
 
         return candidate;
     }
@@ -128,6 +130,11 @@ public class Particle implements IDrawer {
     public CoordinateVector getCoordinateVector() {
 
         return current;
+    }
+
+    public History<CoordinateVector> getHistory() {
+
+        return history;
     }
 
 }

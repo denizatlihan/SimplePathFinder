@@ -1,6 +1,4 @@
-package cankaya.ie552.denizatlihan.drawer;
-
-import cankaya.ie552.denizatlihan.pso.CoordinateVector;
+package cankaya.ie552.denizatlihan.utility;
 
 public interface IObstacle extends IDrawer {
 
