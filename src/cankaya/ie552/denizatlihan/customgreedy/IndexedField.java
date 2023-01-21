@@ -1,5 +1,6 @@
 package cankaya.ie552.denizatlihan.customgreedy;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,8 @@ public class IndexedField {
     private IndexRect[][] rects;
     private IndexRect start;
     private IndexRect finish;
+    private int iterations;
+    private long totalElapsed;
 
     public IndexedField(int rows, int cols) {
 
@@ -44,7 +47,10 @@ public class IndexedField {
         this.finish = finish;
     }
 
-    public void solve(TestMedia media, int fps) {
+    public GreedyResult solve(TestMedia media, int fps, long indexingTime) {
+
+        iterations = 0;
+        totalElapsed = 0;
 
         List<IndexRect> path = new ArrayList<IndexRect>();
 
@@ -52,38 +58,41 @@ public class IndexedField {
 
         while (current != null && finish.equals(current) == false) {
 
-            long t0 = System.currentTimeMillis();
+            iterations++;
+
+            long t0 = System.nanoTime();
 
             IndexRect rect = searchNext(current, finish);
 
             if (rect == null) {
 
-                current.forbidden = true;
-
-                // current = path.get(path.size() - 1);
+                current.deadEnd = true;
 
                 path.remove(current);
                 current = path.get(path.size() - 1);
 
-                long elapsed = System.currentTimeMillis() - t0;
+                long elapsed = System.nanoTime() - t0;
 
-                Utils.sleep((1000 / fps) - elapsed);
+                totalElapsed += elapsed;
+                Utils.sleep((1000 / fps) - (elapsed / 1000000));
+
                 continue;
-            } else {
-
-                current = rect;
-                current.walked = true;
             }
+
+            current = rect;
+            current.walked = true;
 
             path.add(current);
 
-            long elapsed = System.currentTimeMillis() - t0;
+            long elapsed = System.nanoTime() - t0;
 
-            Utils.sleep((1000 / fps) - elapsed);
+            totalElapsed += elapsed;
+            Utils.sleep((1000 / fps) - (elapsed / 1000000));
 
             media.repaint();
-            System.out.println("completed");
         }
+
+        return new GreedyResult(iterations, totalElapsed, indexingTime);
 
     }
 
@@ -136,5 +145,13 @@ public class IndexedField {
         }
 
         return null;
+    }
+
+    public void drawSummary(Graphics2D g2, long elapsedForIndexing) {
+
+        g2.setColor(Color.white);
+        g2.drawString("Iteration: " + iterations, 10, 450);
+        g2.drawString("Elapsed(ms): " + (elapsedForIndexing + totalElapsed) / 1000000, 10, 470);
+
     }
 }

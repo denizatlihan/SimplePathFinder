@@ -7,7 +7,6 @@ import java.util.List;
 import cankaya.ie552.denizatlihan.TestMedia;
 import cankaya.ie552.denizatlihan.utility.Checkpoint;
 import cankaya.ie552.denizatlihan.utility.IObstacle;
-import cankaya.ie552.denizatlihan.utility.Utils;
 
 public class PsoSolver {
 
@@ -76,7 +75,7 @@ public class PsoSolver {
 
             media.repaint();
 
-            Utils.sleep((1000 / fps) - (System.currentTimeMillis() - t0));
+            // Utils.sleep((1000 / fps) - (System.currentTimeMillis() - t0));
 
         }
 

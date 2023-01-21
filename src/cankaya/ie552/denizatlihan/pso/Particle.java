@@ -9,15 +9,11 @@ import cankaya.ie552.denizatlihan.utility.CoordinateVector;
 import cankaya.ie552.denizatlihan.utility.History;
 import cankaya.ie552.denizatlihan.utility.IDrawer;
 import cankaya.ie552.denizatlihan.utility.IObstacle;
-import cankaya.ie552.denizatlihan.utility.Utils;
 
 public class Particle implements IDrawer {
 
     private int rOut = 8;
     private int rIn = 6;
-
-    private static final double c1 = 0.8d;
-    private static final double c2 = 0.3d;
 
     private static final int len = 10;
     private static final double maxHeadingChange = Math.PI / 6;
@@ -29,7 +25,7 @@ public class Particle implements IDrawer {
 
     public Particle(int centerX, int centerY, double heading) {
 
-        this.current = new CoordinateVector(centerX, centerY, heading);
+        this.current = new CoordinateVector(centerX, centerY, 0);
     }
 
     @Override
@@ -46,15 +42,9 @@ public class Particle implements IDrawer {
         g.drawLine(current.x, current.y, current.x + x2, current.y + y2);
     }
 
-    public CoordinateVector calculateNextLocation(List<IObstacle> obstacles, Checkpoint finish,
-            int globalBestDistance) {
+    public int calculateNextLocation(List<IObstacle> obstacles, Checkpoint finish, CoordinateVector globalBest) {
 
-        history.push(new CoordinateVector(current.x, current.y, current.heading));
-
-        CoordinateVector candidate = calculateRandomPosition(current, finish);
-
-        int historyLimit = history.size() - 2;
-
+        CoordinateVector candidate = calculateRandomPosition(current, finish, globalBest, obstacles, .1, .8, .1);
         boolean available = false;
 
         while (available == false) {
@@ -65,45 +55,99 @@ public class Particle implements IDrawer {
 
                 if (obstacle.contains(candidate)) {
 
-                    if (history.size() > historyLimit) {
+                    for (int i = 0; i < 2; i++) {
 
-                        CoordinateVector last = history.pop();
-                        current.x = last.x;
-                        current.y = last.y;
-                        current.heading = last.heading;
+                        if (history.size() > 0) {
+
+                            current = history.pop();
+                        }
                     }
 
+                    // candidate = calculateRandomPosition(current, finish,
+                    // globalBest, obstacles, 1, .0, .0);
+                    candidate = rotate(current);
+
                     available = false;
-                    candidate = calculateRandomPosition(current, finish);
                     break;
                 }
             }
         }
 
-        current.x = candidate.x;
-        current.y = candidate.y;
-        current.heading = candidate.heading;
+        history.push(new CoordinateVector(current.x, current.y, current.heading));
 
-        return null;
+        current = candidate;
+
+        return finish.distanceTo(current);
     }
 
-    private CoordinateVector calculateRandomPosition(CoordinateVector current, Checkpoint finish) {
+    private CoordinateVector rotate(CoordinateVector current) {
 
-        double randomChange = (Math.random() * maxHeadingChange) - (maxHeadingChange / 2);
+        int sign = Math.random() < 0.5 ? -1 : 1;
 
-        CoordinateVector candidate = new CoordinateVector(current.x, current.y, current.heading);
+        double angle = current.heading + sign * maxHeadingChange;
 
-        candidate.x = (int) (current.x + len * c1 * Math.cos(current.heading + randomChange));
-        candidate.y = (int) (current.y + len * c1 * Math.sin(current.heading + randomChange));
+        return new CoordinateVector((int) (current.x + len * Math.cos(angle)),
+                (int) (current.y + len * Math.sin(angle)), angle);
+    }
 
-        double angleBetween = Utils.angleBetween(candidate, finish);
+    private CoordinateVector calculateRandomPosition(CoordinateVector current, Checkpoint finish,
+            CoordinateVector swarmBest, List<IObstacle> obstacles, double cRand, double cGlob, double cSwarm) {
 
-        candidate.x += (int) (len * c2 * Math.cos(angleBetween));
-        candidate.y += (int) (len * c2 * Math.sin(angleBetween));
+        double angleGlobalBest = Math
+                .atan(((double) finish.getCenterY() - current.y) / ((double) finish.getCenterX() - current.x));
 
-        candidate.heading = Utils.angleBetween(current, candidate);
+        double xGlobalBest = (Math.cos(angleGlobalBest) * len * cGlob);
+        double yGlobalBest = (Math.sin(angleGlobalBest) * len * cGlob);
 
-        return candidate;
+        double angleSwarmBest = Math.atan(((double) swarmBest.y - current.y) / ((double) swarmBest.x - current.x));
+
+        double xSwarmBest = (Math.cos(angleSwarmBest) * len * cSwarm);
+        double ySwarmBest = (Math.sin(angleSwarmBest) * len * cSwarm);
+
+        double angleDiff = Math.random() * maxHeadingChange * 2 - maxHeadingChange;
+
+        double xRandom = (Math.cos(current.heading + angleDiff) * len * cRand);
+        double yRandom = (Math.sin(current.heading + angleDiff) * len * cRand);
+
+        double xCandidate = current.x + xSwarmBest + xGlobalBest + xRandom;
+        double yCandidate = current.y + ySwarmBest + yGlobalBest + yRandom;
+
+        double headingCandidate = Math.atan((yCandidate - current.y) / (xCandidate - current.x));
+        double headingDiff = headingCandidate - current.heading;
+
+        if (headingDiff < 0 && headingDiff < -maxHeadingChange) {
+
+            headingDiff = -maxHeadingChange;
+            xCandidate = current.x + len * Math.cos(current.heading + headingDiff);
+            yCandidate = current.y + len * Math.sin(current.heading + headingDiff);
+
+        } else if (headingDiff > maxHeadingChange) {
+
+            headingDiff = maxHeadingChange;
+            xCandidate = current.x + len * Math.cos(current.heading + headingDiff);
+            yCandidate = current.y + len * Math.sin(current.heading + headingDiff);
+        }
+
+        return new CoordinateVector((int) xCandidate, (int) yCandidate, current.heading + headingDiff);
+        /////////////////////////////
+        // double randomChange = (Math.random() * maxHeadingChange) -
+        // (maxHeadingChange / 2);
+        //
+        // CoordinateVector candidate = new CoordinateVector(current.x,
+        // current.y, current.heading);
+        //
+        // candidate.x = (int) (current.x + len * c1 * Math.cos(current.heading
+        // + randomChange));
+        // candidate.y = (int) (current.y + len * c1 * Math.sin(current.heading
+        // + randomChange));
+        //
+        // double angleBetween = Utils.angleBetween(candidate, finish);
+        //
+        // candidate.x += (int) (len * c2 * Math.cos(angleBetween));
+        // candidate.y += (int) (len * c2 * Math.sin(angleBetween));
+        //
+        // candidate.heading = Utils.angleBetween(current, candidate);
+
     }
 
     public boolean inside(Checkpoint finish) {
@@ -118,7 +162,12 @@ public class Particle implements IDrawer {
             CoordinateVector c1 = history.get(i);
             CoordinateVector c2 = history.get(i + 1);
 
-            g.setColor(Color.cyan);
+            if (c2.rotated == true) {
+
+                g.setColor(Color.red);
+            } else {
+                g.setColor(Color.cyan);
+            }
             g.drawLine(c1.x, c1.y, c2.x, c2.y);
 
             g.setColor(colorOut);

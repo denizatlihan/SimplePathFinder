@@ -34,16 +34,13 @@ public class GreedySolver {
 
         long elapsed = System.nanoTime() - t0;
 
-        System.out.println("Indexing completed in " + (elapsed / 1000000) + " ms");
-
         media.setDrawer(g2 -> {
 
             indexedField.drawField(g2);
+            indexedField.drawSummary(g2, elapsed);
         });
 
-        indexedField.solve(media, fps);
-
-        return null;
+        return indexedField.solve(media, fps, elapsed);
     }
 
     private IndexedField indexMedia(TestMedia media, List<IObstacle> obstacles, Checkpoint start, Checkpoint finish) {

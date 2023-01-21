@@ -17,10 +17,16 @@ public class PsoResult {
 
     public void print() {
 
-        System.out.println("PSO SOLUTION:");
-        System.out.println("Iteration: " + iteration);
-        System.out.println("# Milestones: " + arrivedParticle.getHistory().size());
-        System.out.println("Elapsed Solution Time Without Animation(ms): " + realElapsedTime / 1000000);
+        if (arrivedParticle != null) {
+
+            System.out.println(
+                    "PSO Result -> Iteration: " + iteration + ", Elapsed Time: " + (realElapsedTime / 1000000));
+        } else {
+
+            System.out.println(
+                    "PSO Result -> SOLUTION NOT FOUND!  Iteration: " + iteration + ", Elapsed Time: "
+                            + (realElapsedTime / 1000000));
+        }
     }
 
 }

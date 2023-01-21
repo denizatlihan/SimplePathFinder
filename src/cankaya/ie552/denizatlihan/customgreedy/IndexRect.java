@@ -18,10 +18,12 @@ public class IndexRect {
     public boolean walked;
     public boolean terminal;
     public boolean forbidden;
+    public boolean deadEnd;
     private Color border = new Color(100, 100, 100, 20);
-    private Color forbiddenColor = new Color(200, 10, 10, 50);
-    private Color terminalColor = new Color(10, 200, 10, 50);
+    private Color forbiddenColor = new Color(200, 50, 50, 70);
+    private Color terminalColor = new Color(50, 210, 50, 70);
     private Color walkedColor = new Color(100, 100, 250, 100);
+    private Color deadEndColor = new Color(200, 100, 50, 100);
 
     public IndexRect(int x, int y, int w, int h, int row, int col) {
 
@@ -43,6 +45,10 @@ public class IndexRect {
 
             g2.setColor(forbiddenColor);
             g2.fillRect(x, y, w, h);
+        } else if (deadEnd == true) {
+
+            g2.setColor(deadEndColor);
+            g2.fillRect(x, y, w, h);
         } else if (terminal == true) {
 
             g2.setColor(terminalColor);
@@ -53,7 +59,6 @@ public class IndexRect {
             g2.setColor(walkedColor);
             g2.fillRect(x, y, w, h);
         }
-
         g2.setColor(border);
         g2.drawRect(x, y, w, h);
     }

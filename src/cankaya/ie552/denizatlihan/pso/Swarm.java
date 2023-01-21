@@ -11,15 +11,17 @@ public class Swarm {
 
     private List<Particle> particles = new ArrayList<Particle>();
     private CoordinateVector globalBest;
+    private int bestDistance;
 
     public Swarm(int numberOfParticles, int startX, int startY) {
 
         for (int i = 0; i < numberOfParticles; i++) {
 
-            particles.add(new Particle(startX, startY, Math.PI / 3));
+            particles.add(new Particle(startX, startY, Math.PI / 6));
         }
 
         globalBest = particles.get(0).getCoordinateVector();
+        bestDistance = Integer.MAX_VALUE;
     }
 
     public List<Particle> getParticles() {
@@ -29,15 +31,18 @@ public class Swarm {
 
     public Particle iterate(List<IObstacle> obstacles, Checkpoint finish) {
 
-        int globalBestDistance = finish.distanceTo(globalBest);
-
         for (Particle particle : particles) {
 
-            particle.calculateNextLocation(obstacles, finish, globalBestDistance);
+            int distance = particle.calculateNextLocation(obstacles, finish, globalBest);
 
             if (particle.inside(finish)) {
 
                 return particle;
+            }
+
+            if (distance < bestDistance) {
+
+                globalBest = particle.getCoordinateVector();
             }
         }
 

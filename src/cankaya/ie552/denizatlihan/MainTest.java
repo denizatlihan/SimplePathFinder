@@ -19,50 +19,40 @@ public class MainTest {
     public static void main(String[] args) {
 
         // 2D experimental simulation media
-        TestMedia media = new TestMedia();
+        TestMedia mediaPso = new TestMedia();
+        TestMedia mediaCustom = new TestMedia();
 
         // Starting point of the path to be calculated
         Checkpoint start = new Checkpoint(0, 0, 10, 10);
-        media.setStart(start);
+        mediaPso.setStart(start);
+        mediaCustom.setStart(start);
 
         // Finishing point of the path to be calculated
         Checkpoint finish = new Checkpoint(490, 490, 10, 10);
-        media.setFinish(finish);
+        mediaPso.setFinish(finish);
+        mediaCustom.setFinish(finish);
 
         // Circular obstacles for test media
         List<IObstacle> obstacles = createObstacles();
-        media.setObstacles(obstacles);
+        mediaPso.setObstacles(obstacles);
+        mediaCustom.setObstacles(obstacles);
 
         // Showing test media as a frame
-        showFrame(media);
+        showFrame(mediaPso, 0, 0);
+        showFrame(mediaCustom, 530, 0);
 
-        // solvePSO(media, start, finish, obstacles);
-
-        // int sleep = 3;
-        // while (sleep-- > 0) {
-        //
-        // System.out.println("Greedy solver Will be started after " + (sleep +
-        // 1) + " seconds...");
-        // Utils.sleep(1000);
-        // }
-
-        System.out.println("Custom Greedy solution has started...");
-
-        GreedySolver greedy = new GreedySolver(media, start, finish, obstacles);
-        GreedyResult greedyResult = greedy.solve(10);
+        new Thread(() -> solvePSO(mediaPso, start, finish, obstacles, 1000)).start();
+        new Thread(() -> solveCutom(mediaCustom, start, finish, obstacles, 1000)).start();
 
     }
 
-    private static void solvePSO(TestMedia media, Checkpoint start, Checkpoint finish, List<IObstacle> obstacles) {
-
-        System.out.println("PSO solution has started...");
+    private static void solvePSO(TestMedia media, Checkpoint start, Checkpoint finish, List<IObstacle> obstacles,
+            int fps) {
 
         // Solving path planning problem with particle swarm optimization
         PsoSolver psoSolver = new PsoSolver(media, start, finish, obstacles, 20);
-        PsoResult psoSolution = psoSolver.solve(20000, 30);
+        PsoResult psoSolution = psoSolver.solve(20000, fps);
         psoSolution.print();
-
-        media.setDrawer(null);
 
         if (psoSolution.solutionFound == true) {
 
@@ -76,28 +66,38 @@ public class MainTest {
         }
     }
 
+    private static void solveCutom(TestMedia media, Checkpoint start, Checkpoint finish, List<IObstacle> obstacles,
+            int fps) {
+
+        GreedySolver greedy = new GreedySolver(media, start, finish, obstacles);
+        GreedyResult greedyResult = greedy.solve(fps);
+        greedyResult.print();
+    }
+
     private static List<IObstacle> createObstacles() {
 
         int r = 100;
         return Arrays.asList(
-                new CircularObstacle(150, 50, r),
+                // new CircularObstacle(150, 50, r),
                 new CircularObstacle(100, 100, r),
                 new CircularObstacle(350, 150, r),
-                new CircularObstacle(100, 200, r),
                 new CircularObstacle(200, 100, r),
+                // new CircularObstacle(100, 200, r),
+                // new CircularObstacle(200, 100, r),
                 new CircularObstacle(250, 250, r),
                 new CircularObstacle(300, 400, r),
                 new CircularObstacle(400, 300, r),
                 new OutterRect(0, 0, 510, 510));
     }
 
-    private static void showFrame(TestMedia media) {
+    private static void showFrame(TestMedia media, int x, int y) {
 
         JFrame frame = new JFrame();
-        frame.setSize(516, 540);
+        frame.setSize(520, 550);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(media);
         frame.setVisible(true);
+        frame.setLocation(x, y);
     }
 
 }
