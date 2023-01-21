@@ -41,8 +41,8 @@ public class MainTest {
         showFrame(mediaPso, 0, 0);
         showFrame(mediaCustom, 530, 0);
 
-        new Thread(() -> solvePSO(mediaPso, start, finish, obstacles, 1000)).start();
-        new Thread(() -> solveCutom(mediaCustom, start, finish, obstacles, 1000)).start();
+        new Thread(() -> solvePSO(mediaPso, start, finish, obstacles, 20)).start();
+        new Thread(() -> solveCutom(mediaCustom, start, finish, obstacles, 20)).start();
 
     }
 
@@ -51,7 +51,7 @@ public class MainTest {
 
         // Solving path planning problem with particle swarm optimization
         PsoSolver psoSolver = new PsoSolver(media, start, finish, obstacles, 20);
-        PsoResult psoSolution = psoSolver.solve(20000, fps);
+        PsoResult psoSolution = psoSolver.solve(500, fps);
         psoSolution.print();
 
         if (psoSolution.solutionFound == true) {

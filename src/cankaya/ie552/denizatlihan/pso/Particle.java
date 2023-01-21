@@ -129,24 +129,6 @@ public class Particle implements IDrawer {
         }
 
         return new CoordinateVector((int) xCandidate, (int) yCandidate, current.heading + headingDiff);
-        /////////////////////////////
-        // double randomChange = (Math.random() * maxHeadingChange) -
-        // (maxHeadingChange / 2);
-        //
-        // CoordinateVector candidate = new CoordinateVector(current.x,
-        // current.y, current.heading);
-        //
-        // candidate.x = (int) (current.x + len * c1 * Math.cos(current.heading
-        // + randomChange));
-        // candidate.y = (int) (current.y + len * c1 * Math.sin(current.heading
-        // + randomChange));
-        //
-        // double angleBetween = Utils.angleBetween(candidate, finish);
-        //
-        // candidate.x += (int) (len * c2 * Math.cos(angleBetween));
-        // candidate.y += (int) (len * c2 * Math.sin(angleBetween));
-        //
-        // candidate.heading = Utils.angleBetween(current, candidate);
 
     }
 
