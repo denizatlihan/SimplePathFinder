@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+import cankaya.ie552.denizatlihan.customgreedy.GreedyResult;
+import cankaya.ie552.denizatlihan.customgreedy.GreedySolver;
 import cankaya.ie552.denizatlihan.pso.PsoResult;
 import cankaya.ie552.denizatlihan.pso.PsoSolver;
 import cankaya.ie552.denizatlihan.utility.Checkpoint;
@@ -34,9 +36,30 @@ public class MainTest {
         // Showing test media as a frame
         showFrame(media);
 
+        // solvePSO(media, start, finish, obstacles);
+
+        // int sleep = 3;
+        // while (sleep-- > 0) {
+        //
+        // System.out.println("Greedy solver Will be started after " + (sleep +
+        // 1) + " seconds...");
+        // Utils.sleep(1000);
+        // }
+
+        System.out.println("Custom Greedy solution has started...");
+
+        GreedySolver greedy = new GreedySolver(media, start, finish, obstacles);
+        GreedyResult greedyResult = greedy.solve(10);
+
+    }
+
+    private static void solvePSO(TestMedia media, Checkpoint start, Checkpoint finish, List<IObstacle> obstacles) {
+
+        System.out.println("PSO solution has started...");
+
         // Solving path planning problem with particle swarm optimization
         PsoSolver psoSolver = new PsoSolver(media, start, finish, obstacles, 20);
-        PsoResult psoSolution = psoSolver.solve(20000, 50);
+        PsoResult psoSolution = psoSolver.solve(20000, 30);
         psoSolution.print();
 
         media.setDrawer(null);
@@ -51,26 +74,21 @@ public class MainTest {
 
             media.repaint();
         }
-
-        // // Solving path planning problem with custom greedy method
-        // GreedySolver greedySolver = new GreedySolver();
-        // Result resultGreedy = greedySolver.solve();
-        //
-        // // Showing custom results
-        // media.showResult(resultGreedy);
-
     }
 
     private static List<IObstacle> createObstacles() {
 
         int r = 100;
         return Arrays.asList(
+                new CircularObstacle(150, 50, r),
+                new CircularObstacle(100, 100, r),
+                new CircularObstacle(350, 150, r),
                 new CircularObstacle(100, 200, r),
                 new CircularObstacle(200, 100, r),
                 new CircularObstacle(250, 250, r),
                 new CircularObstacle(300, 400, r),
                 new CircularObstacle(400, 300, r),
-                new OutterRect(0, 0, 500, 500));
+                new OutterRect(0, 0, 510, 510));
     }
 
     private static void showFrame(TestMedia media) {

@@ -45,7 +45,7 @@ public class PsoSolver {
         g2.drawString("Elapsed(ms): " + (realElapsedTime / 1000000), 10, 470);
     }
 
-    public PsoResult solve(long iterationLimit, long delayForAnimation) {
+    public PsoResult solve(long iterationLimit, int fps) {
 
         Particle arrivedParticle = null;
         boolean solutionFound = false;
@@ -53,6 +53,8 @@ public class PsoSolver {
         realElapsedTime = 0l;
 
         while (iteration < iterationLimit) {
+
+            long t0 = System.currentTimeMillis();
 
             iteration++;
 
@@ -74,7 +76,7 @@ public class PsoSolver {
 
             media.repaint();
 
-            Utils.sleep(delayForAnimation);
+            Utils.sleep((1000 / fps) - (System.currentTimeMillis() - t0));
 
         }
 
