@@ -16,6 +16,7 @@ public class IndexedField {
     private int iterations;
     private long totalElapsed;
     private List<IndexRect> path;
+    private GreedyResult result;
 
     public IndexedField(int rows, int cols) {
 
@@ -70,6 +71,12 @@ public class IndexedField {
                 current.deadEnd = true;
 
                 path.remove(current);
+
+                if (path.size() == 0) {
+
+                    result = new GreedyResult(iterations, totalElapsed, indexingTime, path);
+                    return result;
+                }
                 current = path.get(path.size() - 1);
 
                 long elapsed = System.nanoTime() - t0;
@@ -93,7 +100,8 @@ public class IndexedField {
             media.repaint();
         }
 
-        return new GreedyResult(iterations, totalElapsed, indexingTime, path);
+        result = new GreedyResult(iterations, totalElapsed, indexingTime, path);
+        return result;
 
     }
 
@@ -216,6 +224,6 @@ public class IndexedField {
             }
         }
 
-        g2.drawString("Path Length: " + path.size(), 10, 490);
+        g2.drawString(String.format("Path Length: %.2f", totalLength), 10, 490);
     }
 }

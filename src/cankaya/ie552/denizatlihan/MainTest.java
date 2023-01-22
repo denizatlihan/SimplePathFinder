@@ -28,7 +28,7 @@ public class MainTest {
         mediaCustom.setStart(start);
 
         // Finishing point of the path to be calculated
-        Checkpoint finish = new Checkpoint(490, 490, 10, 10);
+        Checkpoint finish = new Checkpoint(490, 190, 10, 10);
         mediaPso.setFinish(finish);
         mediaCustom.setFinish(finish);
 
@@ -54,15 +54,11 @@ public class MainTest {
         PsoResult psoSolution = psoSolver.solve(300, fps);
         psoSolution.print();
 
-        // if (psoSolution.solutionFound == true) {
-
         media.setDrawer(g2 -> {
 
             psoSolution.draw(g2);
         });
-
         media.repaint();
-        // }
     }
 
     private static void solveCutom(TestMedia media, Checkpoint start, Checkpoint finish, List<IObstacle> obstacles,
@@ -71,6 +67,12 @@ public class MainTest {
         GreedySolver greedy = new GreedySolver(media, start, finish, obstacles);
         GreedyResult greedyResult = greedy.solve(fps);
         greedyResult.print();
+        media.setDrawer(g2 -> {
+
+            greedyResult.draw(g2);
+        });
+        media.repaint();
+
     }
 
     private static List<IObstacle> createObstacles() {

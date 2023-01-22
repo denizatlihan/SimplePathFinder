@@ -41,7 +41,9 @@ public class GreedySolver {
             indexedField.drawPath(g2);
         });
 
-        return indexedField.solve(media, fps, elapsed);
+        GreedyResult solution = indexedField.solve(media, fps, elapsed);
+        solution.setIndexedField(indexedField);
+        return solution;
     }
 
     private IndexedField indexMedia(TestMedia media, List<IObstacle> obstacles, Checkpoint start, Checkpoint finish) {
