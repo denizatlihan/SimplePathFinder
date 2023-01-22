@@ -76,7 +76,7 @@ public class PsoResult {
 
         if (solutionFound == true) {
 
-            g.drawString("Distance: " + distance, 10, 490);
+            g.drawString(String.format("Distance: %.2f", distance), 10, 490);
         } else {
 
             g.setColor(Color.red);

@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
-import cankaya.ie552.denizatlihan.customgreedy.GreedyResult;
-import cankaya.ie552.denizatlihan.customgreedy.GreedySolver;
+import cankaya.ie552.denizatlihan.ghostwalker.GhostWalker;
+import cankaya.ie552.denizatlihan.ghostwalker.WalkerResult;
 import cankaya.ie552.denizatlihan.pso.PsoResult;
 import cankaya.ie552.denizatlihan.pso.PsoSolver;
 import cankaya.ie552.denizatlihan.utility.Checkpoint;
@@ -38,11 +38,11 @@ public class MainTest {
         mediaCustom.setObstacles(obstacles);
 
         // Showing test media as a frame
-        showFrame(mediaPso, 0, 0);
-        showFrame(mediaCustom, 530, 0);
+        showFrame(mediaPso, 0, 0, "Modified PSO");
+        showFrame(mediaCustom, 530, 0, "Ghost Walker");
 
         new Thread(() -> solvePSO(mediaPso, start, finish, obstacles, 20)).start();
-        new Thread(() -> solveCutom(mediaCustom, start, finish, obstacles, 20)).start();
+        new Thread(() -> solveGhostWalker(mediaCustom, start, finish, obstacles, 20)).start();
 
     }
 
@@ -61,15 +61,15 @@ public class MainTest {
         media.repaint();
     }
 
-    private static void solveCutom(TestMedia media, Checkpoint start, Checkpoint finish, List<IObstacle> obstacles,
-            int fps) {
+    private static void solveGhostWalker(TestMedia media, Checkpoint start, Checkpoint finish,
+            List<IObstacle> obstacles, int fps) {
 
-        GreedySolver greedy = new GreedySolver(media, start, finish, obstacles);
-        GreedyResult greedyResult = greedy.solve(fps);
-        greedyResult.print();
+        GhostWalker ghostWalker = new GhostWalker(media, start, finish, obstacles);
+        WalkerResult walkerResult = ghostWalker.solve(fps);
+        walkerResult.print();
         media.setDrawer(g2 -> {
 
-            greedyResult.draw(g2);
+            walkerResult.draw(g2);
         });
         media.repaint();
 
@@ -91,9 +91,9 @@ public class MainTest {
                 new OutterRect(0, 0, 510, 510));
     }
 
-    private static void showFrame(TestMedia media, int x, int y) {
+    private static void showFrame(TestMedia media, int x, int y, String frameName) {
 
-        JFrame frame = new JFrame();
+        JFrame frame = new JFrame(frameName);
         frame.setSize(520, 550);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(media);

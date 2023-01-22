@@ -1,4 +1,4 @@
-package cankaya.ie552.denizatlihan.customgreedy;
+package cankaya.ie552.denizatlihan.ghostwalker;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

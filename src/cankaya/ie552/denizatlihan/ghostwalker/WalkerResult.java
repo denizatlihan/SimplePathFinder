@@ -1,10 +1,10 @@
-package cankaya.ie552.denizatlihan.customgreedy;
+package cankaya.ie552.denizatlihan.ghostwalker;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.List;
 
-public class GreedyResult {
+public class WalkerResult {
 
     public int iterations;
     public long totalElapsed;
@@ -12,7 +12,7 @@ public class GreedyResult {
     public List<IndexRect> path;
     private IndexedField indexedField;
 
-    public GreedyResult(int iterations, long totalElapsed, long indexingTime, List<IndexRect> path) {
+    public WalkerResult(int iterations, long totalElapsed, long indexingTime, List<IndexRect> path) {
 
         this.iterations = iterations;
         this.totalElapsed = totalElapsed;
@@ -23,7 +23,7 @@ public class GreedyResult {
     public void print() {
 
         System.out.println(
-                "Custom Greedy Result -> Iteration: " + iterations + ", Elapsed Time(ms): "
+                "Ghost Walker-> Iteration: " + iterations + ", Elapsed Time(ms): "
                         + ((totalElapsed + indexingTime) / 1000000));
     }
 
@@ -38,7 +38,7 @@ public class GreedyResult {
         if (indexedField != null) {
 
             indexedField.drawField(g2);
-            indexedField.drawSummary(g2, totalElapsed);
+            indexedField.drawSummary(g2, totalElapsed + indexingTime);
             indexedField.drawPath(g2);
         }
 

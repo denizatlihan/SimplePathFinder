@@ -1,4 +1,4 @@
-package cankaya.ie552.denizatlihan.customgreedy;
+package cankaya.ie552.denizatlihan.ghostwalker;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import cankaya.ie552.denizatlihan.TestMedia;
 import cankaya.ie552.denizatlihan.utility.Checkpoint;
 import cankaya.ie552.denizatlihan.utility.IObstacle;
 
-public class GreedySolver {
+public class GhostWalker {
 
     private TestMedia media;
     private Checkpoint start;
@@ -14,7 +14,7 @@ public class GreedySolver {
     private List<IObstacle> obstacles;
     private int parseWh;
 
-    public GreedySolver(TestMedia media, Checkpoint start, Checkpoint finish, List<IObstacle> obstacles) {
+    public GhostWalker(TestMedia media, Checkpoint start, Checkpoint finish, List<IObstacle> obstacles) {
 
         this.media = media;
         this.start = start;
@@ -26,7 +26,7 @@ public class GreedySolver {
         parseWh = (int) Math.round(maxLen * Math.cos(maxTurn) + maxLen * Math.sin(maxTurn));
     }
 
-    public GreedyResult solve(int fps) {
+    public WalkerResult solve(int fps) {
 
         long t0 = System.nanoTime();
 
@@ -41,7 +41,7 @@ public class GreedySolver {
             indexedField.drawPath(g2);
         });
 
-        GreedyResult solution = indexedField.solve(media, fps, elapsed);
+        WalkerResult solution = indexedField.walk(media, fps, elapsed);
         solution.setIndexedField(indexedField);
         return solution;
     }

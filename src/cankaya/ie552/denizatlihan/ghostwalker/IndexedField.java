@@ -1,4 +1,4 @@
-package cankaya.ie552.denizatlihan.customgreedy;
+package cankaya.ie552.denizatlihan.ghostwalker;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -16,7 +16,7 @@ public class IndexedField {
     private int iterations;
     private long totalElapsed;
     private List<IndexRect> path;
-    private GreedyResult result;
+    private WalkerResult result;
 
     public IndexedField(int rows, int cols) {
 
@@ -49,7 +49,7 @@ public class IndexedField {
         this.finish = finish;
     }
 
-    public GreedyResult solve(TestMedia media, int fps, long indexingTime) {
+    public WalkerResult walk(TestMedia media, int fps, long indexingTime) {
 
         iterations = 0;
         totalElapsed = 0;
@@ -74,7 +74,7 @@ public class IndexedField {
 
                 if (path.size() == 0) {
 
-                    result = new GreedyResult(iterations, totalElapsed, indexingTime, path);
+                    result = new WalkerResult(iterations, totalElapsed, indexingTime, path);
                     return result;
                 }
                 current = path.get(path.size() - 1);
@@ -100,7 +100,7 @@ public class IndexedField {
             media.repaint();
         }
 
-        result = new GreedyResult(iterations, totalElapsed, indexingTime, path);
+        result = new WalkerResult(iterations, totalElapsed, indexingTime, path);
         return result;
 
     }
