@@ -28,7 +28,7 @@ public class MainTest {
         mediaCustom.setStart(start);
 
         // Finishing point of the path to be calculated
-        Checkpoint finish = new Checkpoint(490, 190, 10, 10);
+        Checkpoint finish = new Checkpoint(490, 490, 10, 10);
         mediaPso.setFinish(finish);
         mediaCustom.setFinish(finish);
 
