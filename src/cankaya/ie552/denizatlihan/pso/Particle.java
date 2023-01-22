@@ -137,14 +137,18 @@ public class Particle implements IDrawer {
         return finish.contains(current);
     }
 
-    public void drawHistory(Graphics g) {
+    public void drawHistory(Graphics g, boolean solutionFound) {
+
+        double distance = 0;
 
         for (int i = 0; i < history.size() - 1; i++) {
 
             CoordinateVector c1 = history.get(i);
             CoordinateVector c2 = history.get(i + 1);
 
-            if (c2.rotated == true) {
+            distance += c2.distanceBetween(c1);
+
+            if (solutionFound == false) {
 
                 g.setColor(Color.red);
             } else {
@@ -160,6 +164,12 @@ public class Particle implements IDrawer {
 
         g.setColor(Color.cyan);
         g.drawLine(c1.x, c1.y, current.x, current.y);
+
+        g.setColor(colorOut);
+        g.fillOval(current.x - 3, current.y - 3, 6, 6);
+        distance += current.distanceBetween(c1);
+        System.out.println(String.format("PSO Distance: %.1f", distance));
+
     }
 
     public CoordinateVector getCoordinateVector() {
@@ -170,6 +180,11 @@ public class Particle implements IDrawer {
     public History<CoordinateVector> getHistory() {
 
         return history;
+    }
+
+    public Color getColorOut() {
+
+        return colorOut;
     }
 
 }

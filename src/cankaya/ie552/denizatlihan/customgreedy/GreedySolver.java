@@ -38,6 +38,7 @@ public class GreedySolver {
 
             indexedField.drawField(g2);
             indexedField.drawSummary(g2, elapsed);
+            indexedField.drawPath(g2);
         });
 
         return indexedField.solve(media, fps, elapsed);

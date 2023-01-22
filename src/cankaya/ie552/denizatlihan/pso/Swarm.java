@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cankaya.ie552.denizatlihan.utility.Checkpoint;
-import cankaya.ie552.denizatlihan.utility.CoordinateVector;
 import cankaya.ie552.denizatlihan.utility.IObstacle;
 
 public class Swarm {
 
     private List<Particle> particles = new ArrayList<Particle>();
-    private CoordinateVector globalBest;
+    private Particle globalBest;
     private int bestDistance;
+    private IterationResult iterationResult = new IterationResult();
 
     public Swarm(int numberOfParticles, int startX, int startY) {
 
@@ -20,7 +20,7 @@ public class Swarm {
             particles.add(new Particle(startX, startY, Math.PI / 6));
         }
 
-        globalBest = particles.get(0).getCoordinateVector();
+        globalBest = particles.get(0);
         bestDistance = Integer.MAX_VALUE;
     }
 
@@ -29,24 +29,28 @@ public class Swarm {
         return particles;
     }
 
-    public Particle iterate(List<IObstacle> obstacles, Checkpoint finish) {
+    public IterationResult iterate(List<IObstacle> obstacles, Checkpoint finish) {
 
         for (Particle particle : particles) {
 
-            int distance = particle.calculateNextLocation(obstacles, finish, globalBest);
+            int distance = particle.calculateNextLocation(obstacles, finish, globalBest.getCoordinateVector());
 
             if (particle.inside(finish)) {
 
-                return particle;
+                iterationResult.found = true;
+                iterationResult.particle = particle;
+                return iterationResult;
             }
 
             if (distance < bestDistance) {
 
-                globalBest = particle.getCoordinateVector();
+                globalBest = particle;
             }
+
+            iterationResult.particle = globalBest;
         }
 
-        return null;
+        return iterationResult;
     }
 
 }

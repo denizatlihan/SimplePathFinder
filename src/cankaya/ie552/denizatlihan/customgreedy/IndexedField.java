@@ -15,6 +15,7 @@ public class IndexedField {
     private IndexRect finish;
     private int iterations;
     private long totalElapsed;
+    private List<IndexRect> path;
 
     public IndexedField(int rows, int cols) {
 
@@ -52,7 +53,7 @@ public class IndexedField {
         iterations = 0;
         totalElapsed = 0;
 
-        List<IndexRect> path = new ArrayList<IndexRect>();
+        path = new ArrayList<IndexRect>();
 
         IndexRect current = start;
 
@@ -92,7 +93,7 @@ public class IndexedField {
             media.repaint();
         }
 
-        return new GreedyResult(iterations, totalElapsed, indexingTime);
+        return new GreedyResult(iterations, totalElapsed, indexingTime, path);
 
     }
 
@@ -103,9 +104,21 @@ public class IndexedField {
         int minDistance = finish.distanceTo(current);
 
         next = nextAvailableNewDistance(current, finish, next, minDistance, -1, 0);
+
+        // if (next == null) {
+        //
         next = nextAvailableNewDistance(current, finish, next, minDistance, 0, -1);
+        // }
+        //
+        // if (next == null) {
+        //
         next = nextAvailableNewDistance(current, finish, next, minDistance, 0, 1);
+        // }
+        //
+        // if (next == null) {
+        //
         next = nextAvailableNewDistance(current, finish, next, minDistance, 1, 0);
+        // }
 
         return next;
     }
@@ -153,5 +166,56 @@ public class IndexedField {
         g2.drawString("Iteration: " + iterations, 10, 450);
         g2.drawString("Elapsed(ms): " + (elapsedForIndexing + totalElapsed) / 1000000, 10, 470);
 
+    }
+
+    public void drawPath(Graphics2D g2) {
+
+        double totalLength = 0;
+
+        ArrayList<IndexRect> calcPath = new ArrayList<>(path);
+        calcPath.add(0, start);
+
+        for (int i = 1; i < calcPath.size() - 1; i++) {
+
+            IndexRect next = calcPath.get(i + 1);
+            IndexRect current = calcPath.get(i);
+            IndexRect prev = calcPath.get(i - 1);
+
+            g2.setColor(Color.cyan);
+            if (prev.row == current.row && current.row == next.row) {
+
+                g2.drawLine(prev.x + prev.w / 2, prev.y + prev.h, current.x + current.w / 2, current.y + current.h);
+                totalLength += prev.w;
+
+            } else if (prev.col == current.col && current.col == next.col) {
+
+                g2.drawLine(prev.x + prev.w, prev.y + prev.h / 2, current.x + current.w, current.y + current.h / 2);
+                totalLength += prev.h;
+
+            } else if (prev.row == current.row && current.row < next.row) {
+
+                g2.setColor(Color.magenta);
+                g2.drawArc(prev.x + prev.w / 2, prev.y + prev.h / 2, current.w, current.h, 180, 90);
+                totalLength += Math.PI * prev.w / 4;
+
+            } else if (prev.row == current.row && current.row > next.row) {
+
+                g2.setColor(Color.green);
+                g2.drawArc(prev.x + prev.w, prev.y, current.w, current.h, 90, 90);
+                totalLength += Math.PI * prev.w / 4;
+            } else if (prev.col == current.col && current.col < next.col) {
+
+                g2.setColor(Color.yellow);
+                g2.drawArc(prev.x + prev.w / 2, prev.y + prev.h / 2, current.w, current.h, 0, 90);
+                totalLength += Math.PI * prev.w / 4;
+            } else if (prev.col == current.col && current.col > next.col) {
+
+                g2.setColor(Color.white);
+                g2.drawArc(prev.x, prev.y, current.w, current.h, 270, 90);
+                totalLength += Math.PI * prev.w / 4;
+            }
+        }
+
+        g2.drawString("Path Length: " + path.size(), 10, 490);
     }
 }

@@ -51,19 +51,18 @@ public class MainTest {
 
         // Solving path planning problem with particle swarm optimization
         PsoSolver psoSolver = new PsoSolver(media, start, finish, obstacles, 20);
-        PsoResult psoSolution = psoSolver.solve(500, fps);
+        PsoResult psoSolution = psoSolver.solve(300, fps);
         psoSolution.print();
 
-        if (psoSolution.solutionFound == true) {
+        // if (psoSolution.solutionFound == true) {
 
-            media.setDrawer(g2 -> {
+        media.setDrawer(g2 -> {
 
-                psoSolution.arrivedParticle.drawHistory(g2);
-                psoSolver.writeIterationSummary(g2);
-            });
+            psoSolution.draw(g2);
+        });
 
-            media.repaint();
-        }
+        media.repaint();
+        // }
     }
 
     private static void solveCutom(TestMedia media, Checkpoint start, Checkpoint finish, List<IObstacle> obstacles,
@@ -78,12 +77,12 @@ public class MainTest {
 
         int r = 100;
         return Arrays.asList(
-                // new CircularObstacle(150, 50, r),
+                new CircularObstacle(150, 50, r),
                 new CircularObstacle(100, 100, r),
                 new CircularObstacle(350, 150, r),
                 new CircularObstacle(200, 100, r),
-                // new CircularObstacle(100, 200, r),
-                // new CircularObstacle(200, 100, r),
+                new CircularObstacle(100, 200, r),
+                new CircularObstacle(200, 100, r),
                 new CircularObstacle(250, 250, r),
                 new CircularObstacle(300, 400, r),
                 new CircularObstacle(400, 300, r),

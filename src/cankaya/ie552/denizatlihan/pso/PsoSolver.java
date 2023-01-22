@@ -47,10 +47,9 @@ public class PsoSolver {
 
     public PsoResult solve(long iterationLimit, int fps) {
 
-        Particle arrivedParticle = null;
-        boolean solutionFound = false;
         iteration = 0;
         realElapsedTime = 0l;
+        IterationResult result = null;
 
         while (iteration < iterationLimit) {
 
@@ -60,7 +59,7 @@ public class PsoSolver {
 
             long start = System.nanoTime();
 
-            arrivedParticle = swarm.iterate(obstacles, finish);
+            result = swarm.iterate(obstacles, finish);
 
             long now = System.nanoTime();
 
@@ -68,9 +67,8 @@ public class PsoSolver {
 
             realElapsedTime += (elapsed);
 
-            if (arrivedParticle != null) {
+            if (result.found == true) {
 
-                solutionFound = true;
                 break;
             }
 
@@ -80,7 +78,7 @@ public class PsoSolver {
 
         }
 
-        return new PsoResult(arrivedParticle, realElapsedTime, solutionFound, iteration);
+        return new PsoResult(result, realElapsedTime, iteration);
     }
 
 }

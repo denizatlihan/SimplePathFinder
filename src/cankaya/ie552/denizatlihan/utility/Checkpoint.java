@@ -9,7 +9,7 @@ public class Checkpoint implements IDrawer {
     private int y;
     private int w;
     private int h;
-    private Color color = new Color(10, 50, 10);
+    private Color color = new Color(110, 150, 110);
 
     public Checkpoint(int x, int y, int w, int h) {
 

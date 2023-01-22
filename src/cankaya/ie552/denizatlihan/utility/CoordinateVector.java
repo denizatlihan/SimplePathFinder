@@ -5,7 +5,6 @@ public class CoordinateVector {
     public int x;
     public int y;
     public double heading;
-    public boolean rotated;
 
     public CoordinateVector(int x, int y, double heading) {
 
@@ -33,6 +32,11 @@ public class CoordinateVector {
         }
 
         return Math.atan((y - c.y) / (x - c.x));
+    }
+
+    public double distanceBetween(CoordinateVector c1) {
+
+        return Math.sqrt(Math.pow(c1.x - x, 2) + Math.pow(c1.y - y, 2));
     }
 
 }
